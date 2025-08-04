@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>College Website Navbar</title>
+    <!-- Tailwind CSS (required by Flowbite) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Flowbite CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <!-- Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <style>
+      /* Custom media queries for admissions banner and hero section */
+      /* Hide nav links and show menu button on small screens */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none !important;
+          position: absolute !important;
+          right: 0 !important;
+          top: 3.5rem !important;
+          width: 12rem !important;
+          background: white !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+          border-radius: 0.75rem !important;
+          z-index: 100 !important;
+        }
+        .nav-links.show {
+          display: flex !important;
+        }
+        .menu-btn {
+          display: flex !important;
+        }
+      }
+      @media (min-width: 769px) {
+        .nav-links {
+          display: flex !important;
+          position: static !important;
+          width: auto !important;
+          background: transparent !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+        }
+        .menu-btn {
+          display: none !important;
+        }
+      }
+      @media (max-width: 640px) {
+        #admissionsBanner {
+          width: 95vw !important;
+          right: 2vw !important;
+          left: 2vw !important;
+          top: 1.5rem !important;
+          padding: 0.5rem !important;
+        }
+        #admissionsBanner .rounded-2xl {
+          border-radius: 1rem !important;
+        }
+        #admissionsBanner .grid {
+          grid-template-columns: 1fr !important;
+        }
+        #hero {
+          height: 50vh !important;
+        }
+        #imageSwapArea {
+          width: 90vw !important;
+          height: 40vw !important;
+        }
+        #img1, #img2 {
+          width: 70vw !important;
+          height: 35vw !important;
+        }
+      }
+      @media (min-width: 641px) and (max-width: 1024px) {
+        #admissionsBanner {
+          width: 70vw !important;
+          right: 4vw !important;
+          left: auto !important;
+        }
+        #hero {
+          height: 60vh !important;
+        }
+        #imageSwapArea {
+          width: 40vw !important;
+          height: 30vw !important;
+        }
+        #img1, #img2 {
+          width: 30vw !important;
+          height: 25vw !important;
+        }
+      }
+      .nav-links {
+        transition: all 0.3s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .nav-links.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      @media (min-width: 769px) {
+        .nav-links {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen">
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+      <div class="container mx-auto flex flex-row items-center justify-between py-4 px-6">
+        <!-- Logo and College Name -->
+        <div class="flex items-center gap-4">
+          <!-- Logo in Navigation -->
+          <div class="rounded-full overflow-hidden border-2 border-blue-500 shadow-md">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&auto=format&fit=crop&q=60" 
+                 alt="Hetauda_City_College_Logo" 
+                 class="w-16 h-16 object-cover" />
+          </div>
+          <div class="flex flex-col items-center justify-center text-center">
+            <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-700 tracking-wide">Hetauda City College / Zenith</h1>
+            <h4 class="text-xs sm:text-sm md:text-base text-gray-500">(Affiliated to Tribhuvan University)</h4>
+          </div>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex-1 flex items-center justify-end relative gap-2">
+          <button class="menu-btn items-center justify-center p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition text-blue-700 font-bold text-xl md:absolute md:right-0 md:top-0" id="menuToggle" aria-label="Open menu">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/></svg>
+          </button>
+          <ul class="nav-links flex flex-col md:flex-row gap-2 md:gap-6 items-center md:bg-transparent md:shadow-none md:rounded-none md:p-0 md:static md:w-auto md:z-auto bg-white shadow-lg rounded-lg p-4 absolute right-0 top-12 w-48 z-50" id="navLinks">
+            <li><a href="hcc.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black bg-blue-100">Home</a></li>
+            <li><a href="team.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black">Team</a></li>
+            <li><a href="services.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black">Services</a></li>
+            <li><a href="courses.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black">Courses</a></li>
+            <li><a href="blog.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black">Blog</a></li>
+            <li><a href="about.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black">About</a></li>
+            <li><a href="contact.html" class="px-4 py-2 rounded-lg hover:bg-blue-100 transition font-semibold text-black">Contact</a></li>
+          </ul>
+          <a href="admin.html" class="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition flex items-center gap-2 hidden md:inline-block" title="Admin Login">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75v-.75z" />
+            </svg>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <section id="hero" class="relative h-[60vh] md:h-[80vh] flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?w=500&auto=format&fit=crop&q=60');">
+      <!-- Hero Heading and Subheading -->
+      <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center max-w-4xl w-full px-4">
+        <div class="relative w-full flex flex-col items-center">
+          <div class="backdrop-blur-m bg-black bg-opacity-40 rounded-2xl shadow-2xl px-8 py-6 w-full flex flex-col items-center">
+            <div class="flex flex-col items-center w-full">
+              <span class="text-base md:text-xl font-bold text-blue-100 tracking-widest text-center mb-2 font-serif uppercase">WELCOME TO</span>
+              <span class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white text-center max-w-full tracking-tight drop-shadow-2xl font-sans mb-2 leading-tight">Hetauda City College</span>
+              <span class="text-xl md:text-2xl lg:text-3xl font-semibold text-blue-100 text-center w-full font-serif mt-1">College of Technology and<br class='hidden md:block'>Management</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating Admissions Button -->
+      <div class="absolute top-8 right-8 md:top-12 md:right-16 z-30 flex flex-col items-end gap-4">
+        <button id="admissionsBtn" class="bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-700 transition-all duration-200 text-lg">Admissions</button>
+      </div>
+      <!-- Admissions Banner (hidden by default) -->
+      <div id="admissionsBanner" class="absolute top-2 right-8 md:top-6 md:right-16 z-40 w-[32rem] max-w-full hidden">
+        <div class="relative rounded-2xl shadow-2xl overflow-hidden bg-white bg-opacity-95 p-0">
+          <button id="closeBanner" class="absolute top-3 right-3 text-black text-3xl font-bold hover:text-red-300 transition">×</button>
+          <div class="flex flex-col items-center justify-center py-8 px-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="bg-white rounded-full p-2 shadow-lg flex flex-col items-center">
+                <!-- Student Image in Admissions Banner -->
+                <img src="https://images.unsplash.com/photo-1629872430082-93d8912beccf?w=500&auto=format&fit=crop&q=60" 
+                     alt="Student" 
+                     class="w-24 h-24 rounded-full object-cover border-2 border-blue-500 mb-2" />
+                <span class="inline-block bg-green-600 text-white text-sm font-bold px-4 py-1 rounded-full shadow">ONGOING</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-8 h-8 text-blue-300 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z"/></svg>
+              <h2 class="text-2xl font-extrabold text-blue-700 opacity-90 tracking-wide text-center w-full">Admissions Open</h2>
+            </div>
+            <div class="flex gap-2 mb-4 flex-wrap justify-center">
+              <span class="bg-white text-blue-700 px-4 py-1 rounded-full font-semibold shadow text-center">BCA</span>
+              <span class="bg-white text-blue-700 px-4 py-1 rounded-full font-semibold shadow text-center">BSc.CSIT</span>
+              <span class="bg-white text-blue-700 px-4 py-1 rounded-full font-semibold shadow text-center">BBS</span>
+              <span class="bg-white text-blue-700 px-4 py-1 rounded-full font-semibold shadow text-center">+2 Science</span>
+              <span class="bg-white text-blue-700 px-4 py-1 rounded-full font-semibold shadow text-center">+2 Management</span>
+            </div>
+            <div class="bg-white bg-opacity-80 rounded-lg p-4 w-full mb-4 text-left shadow">
+              <div class="grid grid-cols-2 gap-x-4 gap-y-2 items-center">
+                <div class="flex items-center gap-2">
+                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 17c4.418 0 8-1.79 8-4V7c0-2.21-3.582-4-8-4S4 4.79 4 7v6c0 2.21 3.582 4 8 4z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 17v5m-4 0h8" />
+                  </svg>
+                  <span class="font-bold text-blue-700">Scholarship Opportunity:</span>
+                </div>
+                <span class="text-gray-700">for deserving students</span>
+                <div class="flex items-center gap-2">
+                  <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                    <circle cx="12" cy="6" r="2" fill="currentColor" class="text-yellow-300" />
+                  </svg>
+                  <span class="font-bold text-blue-700">Morning Class:</span>
+                </div>
+                <span class="text-gray-700">available</span>
+                <div class="flex items-center gap-2">
+                  <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6" />
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                  </svg>
+                  <span class="font-bold text-blue-700">Counseling:</span>
+                </div>
+                <span class="text-gray-700">free career guidance</span>
+              </div>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-4 w-full mb-4 text-left shadow flex flex-col gap-2">
+            <div class="flex flex-col items-center gap-2 w-full">
+              <a href="register.html" class="bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-700 transition-all duration-200 w-full text-center">REGISTER NOW!</a>
+              <a href="#contact-section" class="text-blue-700 font-semibold underline hover:text-blue-900 transition">Contact Admissions Office</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Hero Content -->
+    </section>
+    <!-- Experience Life at HCC Carousel Section -->
+    <section class="bg-white py-12">
+      <div class="max-w-7xl mx-auto px-2 sm:px-4">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-blue-900 text-center mb-8">Experience Life at HCC</h2>
+        <div class="relative">
+          <!-- Slides -->
+          <div id="carouselSlides" class="flex transition-transform duration-700 ease-in-out" style="transform: translateX(0%);">
+            <!-- Slide 1 -->
+            <div class="carousel-item flex flex-col items-center w-full md:w-1/3 px-2 group transition-transform duration-300 hover:scale-105">
+              <div class="relative flex justify-center items-center w-full">
+                <div class="bg-gray-100 rounded-xl flex items-center justify-center w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video overflow-hidden">
+                  <!-- YouTube Thumbnails in Carousel -->
+                  <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=500&auto=format&fit=crop&q=60" 
+                       alt="Teachers guiding students" 
+                       class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="mt-4 text-lg font-semibold text-blue-900 text-center">Teachers guiding students</div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="carousel-item flex flex-col items-center w-full md:w-1/3 px-2 group transition-transform duration-300 hover:scale-105">
+              <div class="relative flex justify-center items-center w-full">
+                <div class="bg-gray-100 rounded-xl flex items-center justify-center w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video overflow-hidden">
+                  <!-- YouTube Thumbnails in Carousel -->
+                  <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=500&auto=format&fit=crop&q=60" 
+                       alt="Parent-teacher meeting" 
+                       class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="mt-4 text-lg font-semibold text-blue-900 text-center">Parent-teacher meeting</div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="carousel-item flex flex-col items-center w-full md:w-1/3 px-2 group transition-transform duration-300 hover:scale-105">
+              <div class="relative flex justify-center items-center w-full">
+                <div class="bg-gray-100 rounded-xl flex items-center justify-center w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video overflow-hidden">
+                  <!-- YouTube Thumbnails in Carousel -->
+                  <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&auto=format&fit=crop&q=60" 
+                       alt="Students in uniform" 
+                       class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="mt-4 text-lg font-semibold text-blue-900 text-center">Students in uniform</div>
+            </div>
+            <!-- Slide 4 (hidden by default) -->
+            <div class="carousel-item flex flex-col items-center w-full md:w-1/3 px-2 group transition-transform duration-300 hover:scale-105 hidden">
+              <div class="relative flex justify-center items-center w-full">
+                <div class="bg-gray-100 rounded-xl flex items-center justify-center w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video overflow-hidden">
+                  <!-- YouTube Thumbnails in Carousel -->
+                  <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&auto=format&fit=crop&q=60" 
+                       alt="Science Lab" 
+                       class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="mt-4 text-lg font-semibold text-blue-900 text-center">Science Lab</div>
+            </div>
+            <!-- Slide 5 (hidden by default) -->
+            <div class="carousel-item flex flex-col items-center w-full md:w-1/3 px-2 group transition-transform duration-300 hover:scale-105 hidden">
+              <div class="relative flex justify-center items-center w-full">
+                <div class="bg-gray-100 rounded-xl flex items-center justify-center w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video overflow-hidden">
+                  <!-- YouTube Thumbnails in Carousel -->
+                  <img src="https://images.unsplash.com/photo-1526238812836-5f779d956a41?w=500&auto=format&fit=crop&q=60" 
+                       alt="Sports Activities" 
+                       class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="mt-4 text-lg font-semibold text-blue-900 text-center">Sports Activities</div>
+            </div>
+            <!-- Slide 6 (hidden by default) -->
+            <div class="carousel-item flex flex-col items-center w-full md:w-1/3 px-2 group transition-transform duration-300 hover:scale-105 hidden">
+              <div class="relative flex justify-center items-center w-full">
+                <div class="bg-gray-100 rounded-xl flex items-center justify-center w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video overflow-hidden">
+                  <!-- YouTube Thumbnails in Carousel -->
+                  <img src="https://images.unsplash.com/photo-1526307616774-60d0098f7642?w=500&auto=format&fit=crop&q=60" 
+                       alt="Cultural Events" 
+                       class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="mt-4 text-lg font-semibold text-blue-900 text-center">Cultural Events</div>
+            </div>
+          </div>
+          <!-- Carousel Controls -->
+          <div class="flex justify-center mt-6 space-x-2" id="carouselDots"></div>
+          <div class="flex justify-center mt-4 gap-4">
+            <button id="prevBtn" class="bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-blue-100 transition disabled:opacity-50" aria-label="Previous slide">
+              <svg class="w-8 h-8 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button id="nextBtn" class="bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-blue-100 transition disabled:opacity-50" aria-label="Next slide">
+              <svg class="w-8 h-8 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      // Optionally, you can add YouTube API logic to play/pause on hover, but most browsers restrict autoplay with sound.
+      // Carousel logic for showing 3 at a time, rest hidden
+      const carouselSlides = document.getElementById('carouselSlides');
+      const carouselItems = Array.from(carouselSlides.getElementsByClassName('carousel-item'));
+      const totalItems = carouselItems.length;
+      const slidesPerView = 3;
+      let currentGroup = 0;
+      const totalGroups = Math.ceil(totalItems / slidesPerView);
+      const dotsContainer = document.getElementById('carouselDots');
+      function renderCarousel() {
+        carouselItems.forEach((item, idx) => {
+          if (idx >= currentGroup * slidesPerView && idx < (currentGroup + 1) * slidesPerView) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+        // Dots
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalGroups; i++) {
+          const dot = document.createElement('button');
+          dot.className = 'w-3 h-3 rounded-full mx-1 ' + (i === currentGroup ? 'bg-green-500' : 'bg-gray-300');
+          dot.setAttribute('aria-label', `Go to group ${i + 1}`);
+          dot.onclick = () => { currentGroup = i; renderCarousel(); };
+          dotsContainer.appendChild(dot);
+        }
+      }
+      renderCarousel();
+      document.getElementById('prevBtn').onclick = function() {
+        currentGroup = (currentGroup - 1 + totalGroups) % totalGroups;
+        renderCarousel();
+      };
+      document.getElementById('nextBtn').onclick = function() {
+        currentGroup = (currentGroup + 1) % totalGroups;
+        renderCarousel();
+      };
+    </script>
+    
+    <!-- HCC Legacy Section -->
+    <section class="bg-white py-16 px-4 md:px-0">
+      <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
+        <!-- Overlay Images -->
+        <div class="relative w-72 h-80 mb-12 md:mb-0 cursor-pointer group" id="imageSwapArea">
+          <div id="img1" class="absolute rounded-xl overflow-hidden shadow-lg w-56 h-72 z-20" 
+               style="transition: all 0.7s cubic-bezier(0.4,0,0.2,1); top:0; left:0; transform: scale(1);">
+            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=500&auto=format&fit=crop&q=60" 
+                 alt="HCC Students" 
+                 class="object-cover w-full h-full" />
+          </div>
+          <div id="img2" class="absolute rounded-xl overflow-hidden shadow-lg w-56 h-72 z-10" 
+               style="transition: all 0.7s cubic-bezier(0.4,0,0.2,1); bottom:0; right:0; transform: scale(0.95);">
+            <img src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=500&auto=format&fit=crop&q=60" 
+                 alt="HCC Campus" 
+                 class="object-cover w-full h-full" />
+          </div>
+        </div>
+        <!-- Text Content -->
+        <div class="flex-1 mt-8 md:mt-0 md:ml-8">
+          <h2 class="text-3xl md:text-4xl font-extrabold text-blue-700 mb-4 text-center md:text-left">A Legacy of Learning and Leadership</h2>
+          <p class="text-gray-700 text-center md:text-left mb-4">At HCC, we’re committed to delivering the highest standard of academic excellence while nurturing each student’s creativity, character, and confidence through a well-rounded, values-driven curriculum.</p>
+          <p class="text-gray-700 text-center md:text-left mb-6">Hetauda City College (HCC) believes education is more than just academics — it’s about shaping well-rounded individuals who can confidently face the future. Established in 2065 B.S., our college has been a pillar of quality education in Hetauda, combining traditional values with innovative teaching methods. Our dedicated faculty focuses on fostering creativity, critical thinking, and strong character in every student. We provide a safe, nurturing environment where students are encouraged to explore their interests through a diverse range of academic programs, extracurricular activities, and community engagement.</p>
+          <div class="flex justify-center md:justify-start">
+            <a href="#about" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Our Story</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Our Core Values and Strengths Section -->
+    <section class="bg-gradient-to-br from-blue-50 to-blue-100 py-16 px-4 md:px-0">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-blue-700 mb-2 text-center">Our Core Values and Strengths</h2>
+        <div class="w-24 h-1 bg-blue-400 rounded mx-auto mb-10"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <!-- Card 1 -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=500&auto=format&fit=crop&q=60" 
+                 alt="Excellence" 
+                 class="w-48 h-48 object-cover rounded-2xl mb-6 border-4 border-blue-100 shadow" />
+            <h3 class="text-xl font-bold text-blue-800 mb-2">Academic Excellence</h3>
+            <div class="w-12 h-1 bg-blue-300 rounded mb-4"></div>
+            <p class="text-gray-600 text-center mb-4">We foster a culture of high achievement, encouraging students to reach their full academic potential through innovative teaching and a supportive environment.</p>
+            <a href="#" class="text-blue-600 font-semibold hover:underline">Learn More</a>
+          </div>
+          <!-- Card 2 -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=60" 
+                 alt="Leadership" 
+                 class="w-48 h-48 object-cover rounded-2xl mb-6 border-4 border-blue-100 shadow" />
+            <h3 class="text-xl font-bold text-blue-800 mb-2">Leadership & Integrity</h3>
+            <div class="w-12 h-1 bg-blue-300 rounded mb-4"></div>
+            <p class="text-gray-600 text-center mb-4">We inspire students to become ethical leaders, instilling values of honesty, responsibility, and service to the community.</p>
+            <a href="#" class="text-blue-600 font-semibold hover:underline">Learn More</a>
+          </div>
+          <!-- Card 3 -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=60" 
+                 alt="Innovation" 
+                 class="w-48 h-48 object-cover rounded-2xl mb-6 border-4 border-blue-100 shadow" />
+            <h3 class="text-xl font-bold text-blue-800 mb-2">Innovation & Growth</h3>
+            <div class="w-12 h-1 bg-blue-300 rounded mb-4"></div>
+            <p class="text-gray-600 text-center mb-4">We embrace change and encourage creative problem-solving, preparing students to thrive in a rapidly evolving world.</p>
+            <a href="#" class="text-blue-600 font-semibold hover:underline">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Consolidated and improved scripts -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Navigation toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        function toggleMenu(e) {
+          e.stopPropagation();
+          navLinks.classList.toggle('show');
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+            navLinks.classList.remove('show');
+          }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+          if (window.innerWidth > 768) {
+            navLinks.classList.remove('show');
+          }
+        });
+
+        // Admissions banner
+        const admissionsBtn = document.getElementById('admissionsBtn');
+        const admissionsBanner = document.getElementById('admissionsBanner');
+        const closeBanner = document.getElementById('closeBanner');
+
+        admissionsBtn.addEventListener('click', () => {
+          admissionsBanner.classList.remove('hidden');
+        });
+
+        closeBanner.addEventListener('click', () => {
+          admissionsBanner.classList.add('hidden');
+        });
+
+        // Image swap functionality
+        const imageSwapArea = document.getElementById('imageSwapArea');
+        const img1 = document.getElementById('img1');
+        const img2 = document.getElementById('img2');
+        let swapped = false;
+
+        imageSwapArea.addEventListener('click', () => {
+          swapped = !swapped;
+          const config = swapped ? {
+            img1: { top: 'auto', left: 'auto', bottom: '0', right: '0', scale: '0.95', zIndex: '10' },
+            img2: { top: '0', left: '0', bottom: 'auto', right: 'auto', scale: '1', zIndex: '20' }
+          } : {
+            img1: { top: '0', left: '0', bottom: 'auto', right: 'auto', scale: '1', zIndex: '20' },
+            img2: { top: 'auto', left: 'auto', bottom: '0', right: '0', scale: '0.95', zIndex: '10' }
+          };
+
+          Object.assign(img1.style, config.img1);
+          Object.assign(img2.style, config.img2);
+        });
+
+        // Initialize carousel
+        initializeCarousel();
+      });
+
+      function initializeCarousel() {
+        // Carousel logic for showing 3 at a time, rest hidden
+        const carouselSlides = document.getElementById('carouselSlides');
+        const carouselItems = Array.from(carouselSlides.getElementsByClassName('carousel-item'));
+        const totalItems = carouselItems.length;
+        const slidesPerView = 3;
+        let currentGroup = 0;
+        const totalGroups = Math.ceil(totalItems / slidesPerView);
+        const dotsContainer = document.getElementById('carouselDots');
+        function renderCarousel() {
+          carouselItems.forEach((item, idx) => {
+            if (idx >= currentGroup * slidesPerView && idx < (currentGroup + 1) * slidesPerView) {
+              item.classList.remove('hidden');
+            } else {
+              item.classList.add('hidden');
+            }
+          });
+          // Dots
+          dotsContainer.innerHTML = '';
+          for (let i = 0; i < totalGroups; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'w-3 h-3 rounded-full mx-1 ' + (i === currentGroup ? 'bg-green-500' : 'bg-gray-300');
+            dot.setAttribute('aria-label', `Go to group ${i + 1}`);
+            dot.onclick = () => { currentGroup = i; renderCarousel(); };
+            dotsContainer.appendChild(dot);
+          }
+        }
+        renderCarousel();
+        document.getElementById('prevBtn').onclick = function() {
+          currentGroup = (currentGroup - 1 + totalGroups) % totalGroups;
+          renderCarousel();
+        };
+        document.getElementById('nextBtn').onclick = function() {
+          currentGroup = (currentGroup + 1) % totalGroups;
+          renderCarousel();
+        };
+      }
+    </script>
+  </body>
+</html>

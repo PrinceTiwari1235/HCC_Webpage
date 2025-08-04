@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - HCC Admissions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+  <header class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto flex flex-row items-center justify-between py-4 px-6">
+      <div class="flex items-center gap-4">
+        <div class="rounded-full overflow-hidden border-2 border-blue-500 shadow-md">
+          <img src="Image/logo_of_HCC.jpg" alt="Hetauda_City_College_Logo" class="w-12 h-12 object-cover" />
+        </div>
+        <div class="flex flex-col items-center justify-center text-center">
+          <h1 class="text-lg sm:text-xl font-bold text-blue-700 tracking-wide">Hetauda City College / Zenith</h1>
+        </div>
+      </div>
+      <a href="hcc.html" class="text-blue-600 font-semibold hover:underline">Back to Home</a>
+    </div>
+  </header>
+  <main class="flex-1 flex flex-col items-center py-12 px-4">
+    <!-- Login Form -->
+    <div id="loginBox" class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mb-8">
+      <h2 class="text-2xl font-extrabold text-blue-700 mb-6 text-center">Admin Login</h2>
+      <form id="adminLoginForm" class="flex flex-col gap-4">
+        <input type="text" id="username" placeholder="Username" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        <input type="password" id="password" placeholder="Password" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        <button type="submit" class="bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 hover:bg-blue-700 transition">Login</button>
+        <p id="loginError" class="text-red-600 text-center hidden">Invalid credentials. Please try again.</p>
+      </form>
+    </div>
+    <!-- Notification -->
+    <div id="emailNotification" class="hidden fixed top-6 left-1/2 transform -translate-x-1/2 bg-white border border-blue-200 shadow-lg px-6 py-3 rounded-lg z-50 text-center text-base font-semibold"></div>
+    <div id="dashboardBox" class="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full mb-8 hidden">
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl shadow">
+          <h4 class="text-blue-700 font-semibold text-sm">Total Applications</h4>
+          <p id="totalApps" class="text-2xl font-bold text-blue-800">0</p>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl shadow">
+          <h4 class="text-green-700 font-semibold text-sm">Approved</h4>
+          <p id="approvedApps" class="text-2xl font-bold text-green-800">0</p>
+        </div>
+        <div class="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-xl shadow">
+          <h4 class="text-red-700 font-semibold text-sm">Declined</h4>
+          <p id="declinedApps" class="text-2xl font-bold text-red-800">0</p>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-xl shadow">
+          <h4 class="text-yellow-700 font-semibold text-sm">Pending</h4>
+          <p id="pendingApps" class="text-2xl font-bold text-yellow-800">0</p>
+        </div>
+      </div>
+
+      <!-- Search and Filter Bar -->
+      <div class="flex flex-wrap gap-4 mb-6">
+        <input type="text" id="searchInput" placeholder="Search applications..." 
+               class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <select id="filterStatus" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="">All Status</option>
+          <option value="approved">Approved</option>
+          <option value="declined">Declined</option>
+          <option value="pending">Pending</option>
+        </select>
+        <select id="sortBy" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="date">Sort by Date</option>
+          <option value="name">Sort by Name</option>
+          <option value="program">Sort by Program</option>
+        </select>
+      </div>
+
+      <!-- Bulk Actions -->
+      <div class="flex items-center gap-4 mb-6">
+        <input type="checkbox" id="selectAll" class="rounded text-blue-600">
+        <label for="selectAll" class="text-sm text-gray-600">Select All</label>
+        <button id="bulkApprove" class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hidden">
+          Approve Selected
+        </button>
+        <button id="bulkDecline" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hidden">
+          Decline Selected
+        </button>
+        <button id="bulkDelete" class="px-4 py-2 bg-gray-500 text-white rounded-lg text-sm font-semibold hidden">
+          Delete Selected
+        </button>
+      </div>
+
+      <div class="mb-8">
+        <h3 class="text-lg font-bold text-blue-600 mb-4">Admissions Submissions</h3>
+        <div id="admissionsCards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-blue-600 mb-4">Image Management</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-blue-100">
+            <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-400 mb-4 bg-gray-50 flex items-center justify-center">
+              <img id="logoPreview" src="Image/logo_of_HCC.jpg" alt="Logo Preview" class="object-cover w-full h-full" />
+            </div>
+            <div class="text-center mb-2">
+              <div class="text-lg font-bold text-blue-700">College Logo</div>
+              <div class="text-xs text-gray-500 mb-2">Recommended: Square, PNG/JPG</div>
+            </div>
+            <label class="block text-blue-700 font-semibold mb-1" for="logoInput">Change Logo</label>
+            <input type="file" id="logoInput" accept="image/*" class="mb-3 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+            <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow hover:from-blue-600 hover:to-blue-800 transition-all duration-200" onclick="changeLogo(event)">Update Logo</button>
+          </div>
+          <!-- Add more image management cards as needed -->
+        </div>
+      </div>
+
+      <!-- After Statistics Cards -->
+      <div class="flex justify-end mb-4">
+        <button id="recycleBinToggle" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Recycle Bin
+          <span id="deletedCount" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-sm">0</span>
+        </button>
+      </div>
+
+      <div id="recycleBinSection" class="hidden">
+        <div class="bg-gray-50 rounded-xl p-6 mb-8">
+          <h3 class="text-lg font-bold text-gray-700 mb-4">Deleted Applications</h3>
+          <div id="deletedApplicationsList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Login logic
+    function showDashboard() {
+      document.getElementById('loginBox').classList.add('hidden');
+      document.getElementById('dashboardBox').classList.remove('hidden');
+    }
+    function showLogin() {
+      document.getElementById('loginBox').classList.remove('hidden');
+      document.getElementById('dashboardBox').classList.add('hidden');
+    }
+    document.getElementById('adminLoginForm').onsubmit = function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      if(username === 'admin' && password === 'admin123') {
+        showDashboard();
+        document.getElementById('loginError').classList.add('hidden');
+        renderAdmissionsCards();
+        if (window.emailjs) {
+          emailjs.init('0r0v6pileX0-Xawo4');
+        }
+      } else {
+        document.getElementById('loginError').classList.remove('hidden');
+      }
+    };
+    // Render admissions as ID cards
+    function renderAdmissionsCards(admissionsData) {
+      let admissions = admissionsData || [];
+      try {
+        admissions = admissionsData || JSON.parse(localStorage.getItem('admissions') || '[]');
+      } catch {}
+      const cards = document.getElementById('admissionsCards');
+      if (!admissions.length) {
+        cards.innerHTML = '<div class="text-center text-gray-400 py-8 col-span-full">No submissions yet.</div>';
+        return;
+      }
+      cards.innerHTML = admissions.map((a, idx) => {
+        const status = a.status || '';
+        let statusBadge = '';
+        if (status === 'approved') {
+          statusBadge = '<span class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold mb-2">Approved</span>';
+        } else if (status === 'declined') {
+          statusBadge = '<span class="inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold mb-2">Declined</span>';
+        }
+        return `
+          <div class="relative group bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition-all duration-300">
+            <!-- Overlay with actions -->
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-300 rounded-2xl flex items-start justify-end p-4">
+              <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                <button onclick="approveAdmission(${idx})" 
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-bold transition-all duration-200 hover:scale-105">
+                  Approve
+                </button>
+                <button onclick="declineAdmission(${idx})" 
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-bold transition-all duration-200 hover:scale-105">
+                  Decline
+                </button>
+                <button onclick="showDeleteModal(${idx})" 
+                        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-bold transition-all duration-200 hover:scale-105">
+                  Delete
+                </button>
+              </div>
+            </div>
+            <!-- Card Content -->
+            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-300 mb-4 bg-gray-100 flex items-center justify-center">
+              ${a.photo ? `<img src="${a.photo}" alt="Photo" class="object-cover w-full h-full" />` : '<svg class="w-16 h-16 text-blue-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75v-.75z"/></svg>'}
+            </div>
+            <div class="text-center">
+              ${statusBadge}
+              <div class="text-xl font-bold text-blue-800 mb-1">${a.name}</div>
+              <div class="text-blue-500 font-semibold mb-2">${a.program}</div>
+              <div class="text-gray-600 text-sm mb-2">${a.dob} | ${a.gender}</div>
+              <div class="text-gray-700 text-sm mb-1"><span class="font-semibold">Address:</span> ${a.address}</div>
+              <div class="text-gray-700 text-sm mb-1"><span class="font-semibold">Guardian:</span> ${a.guardian}</div>
+              <div class="text-gray-700 text-sm mb-1"><span class="font-semibold">Prev. School:</span> ${a.prevschool}</div>
+              <div class="text-gray-700 text-sm mb-1"><span class="font-semibold">Email:</span> ${a.email}</div>
+              <div class="text-gray-700 text-sm mb-1"><span class="font-semibold">Phone:</span> ${a.phone}</div>
+              ${a.message ? `<div class="text-gray-500 text-xs mt-2 italic">"${a.message}"</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    // Only show login on page load
+    window.onload = function() {
+      showLogin();
+    };
+
+    // Approve/Decline logic
+window.approveAdmission = function(idx) {
+  let admissions = [];
+  try {
+    admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+  } catch {}
+  admissions[idx].status = 'approved';
+  localStorage.setItem('admissions', JSON.stringify(admissions));
+  sendDecisionEmail(admissions[idx], 'approved');
+  renderAdmissionsCards();
+};
+window.declineAdmission = function(idx) {
+  let admissions = [];
+  try {
+    admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+  } catch {}
+  admissions[idx].status = 'declined';
+  localStorage.setItem('admissions', JSON.stringify(admissions));
+  sendDecisionEmail(admissions[idx], 'declined');
+  renderAdmissionsCards();
+};
+
+function sendDecisionEmail(admission, decision) {
+  if (!window.emailjs) return;
+  const templateParams = {
+    title: decision === 'approved' ? 'Application Approved' : 'Application Declined',
+    name: admission.name,
+    message: decision === 'approved'
+      ? `Congratulations, your application for ${admission.program} at Hetauda City College has been approved!`
+      : `We regret to inform you that your application for ${admission.program} at Hetauda City College has been declined.`,
+    email: admission.email
+  };
+  emailjs.send('service_4sp6nls', 'template_xcdxohy', templateParams)
+    .then(function(response) {
+      showEmailNotification('Email sent successfully to ' + admission.email, true);
+      console.log('Email sent!', response.status, response.text);
+    }, function(error) {
+      showEmailNotification('Failed to send email to ' + admission.email, false);
+      console.error('Email send failed:', error);
+    });
+}
+
+    function showEmailNotification(message, success) {
+      var notif = document.getElementById('emailNotification');
+      notif.textContent = message;
+      notif.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg z-50 text-center text-base font-semibold ' + (success ? 'bg-green-50 border border-green-300 text-green-700' : 'bg-red-50 border border-red-300 text-red-700');
+      notif.style.display = 'block';
+      notif.classList.remove('hidden');
+      setTimeout(function() {
+        notif.classList.add('hidden');
+        notif.style.display = 'none';
+      }, 3500);
+    }
+
+    // Image management (demo: only updates preview, not actual file)
+    function changeLogo(e) {
+      e.preventDefault();
+      const input = document.getElementById('logoInput');
+      const preview = document.getElementById('logoPreview');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          preview.src = ev.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // Add these new functions for delete functionality
+    let deleteIndex = -1;
+
+    function showDeleteModal(idx) {
+      deleteIndex = idx;
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function cancelDelete() {
+      deleteIndex = -1;
+      document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    function confirmDelete() {
+      if (deleteIndex === -1) return;
+      
+      let admissions = [];
+      try {
+        admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+        admissions.splice(deleteIndex, 1);
+        localStorage.setItem('admissions', JSON.stringify(admissions));
+        showEmailNotification('Application deleted successfully', true);
+      } catch (error) {
+        showEmailNotification('Error deleting application', false);
+        console.error('Delete error:', error);
+      }
+
+      document.getElementById('deleteModal').classList.add('hidden');
+      deleteIndex = -1;
+      renderAdmissionsCards();
+    }
+
+    // Add these new functions after existing script
+        function updateDashboardStats() {
+          const admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+          document.getElementById('totalApps').textContent = admissions.length;
+          document.getElementById('approvedApps').textContent = admissions.filter(a => a.status === 'approved').length;
+          document.getElementById('declinedApps').textContent = admissions.filter(a => a.status === 'declined').length;
+          document.getElementById('pendingApps').textContent = admissions.filter(a => !a.status).length;
+        }
+
+        function handleSearch() {
+          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+          const statusFilter = document.getElementById('filterStatus').value;
+          const sortBy = document.getElementById('sortBy').value;
+          
+          let admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+          
+          // Filter
+          admissions = admissions.filter(a => 
+            (a.name.toLowerCase().includes(searchTerm) ||
+             a.email.toLowerCase().includes(searchTerm) ||
+             a.program.toLowerCase().includes(searchTerm)) &&
+            (!statusFilter || a.status === statusFilter)
+          );
+          
+          // Sort
+          admissions.sort((a, b) => {
+            switch(sortBy) {
+              case 'name': return a.name.localeCompare(b.name);
+              case 'program': return a.program.localeCompare(b.program);
+              default: return new Date(b.submissionDate) - new Date(a.submissionDate);
+            }
+          });
+          
+          renderAdmissionsCards(admissions);
+        }
+
+        // Add event listeners
+        document.getElementById('searchInput').addEventListener('input', handleSearch);
+        document.getElementById('filterStatus').addEventListener('change', handleSearch);
+        document.getElementById('sortBy').addEventListener('change', handleSearch);
+        
+        // Modify the showDashboard function to include stats update
+        const originalShowDashboard = showDashboard;
+        showDashboard = function() {
+          originalShowDashboard();
+          updateDashboardStats();
+        };
+
+        // Add bulk action handlers
+        document.getElementById('selectAll').addEventListener('change', function(e) {
+          const checkboxes = document.querySelectorAll('.admission-checkbox');
+          checkboxes.forEach(cb => cb.checked = e.target.checked);
+          updateBulkActionButtons();
+        });
+
+        function updateBulkActionButtons() {
+          const selected = document.querySelectorAll('.admission-checkbox:checked').length;
+          ['bulkApprove', 'bulkDecline', 'bulkDelete'].forEach(id => {
+            document.getElementById(id).classList.toggle('hidden', selected === 0);
+          });
+        }
+
+        // Update the renderAdmissionsCards function to include checkboxes
+        const originalRenderCards = renderAdmissionsCards;
+        renderAdmissionsCards = function(admissions) {
+          originalRenderCards(admissions);
+          updateDashboardStats();
+        };
+      </script>
+<!-- Add this at the end of the file, before </body> -->
+<script>
+// Add these functions after your existing script
+const deletedAppsKey = 'hcc_deleted_applications';
+
+function getDeletedApplications() {
+  try {
+    return JSON.parse(localStorage.getItem(deletedAppsKey) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function saveDeletedApplications(apps) {
+  localStorage.setItem(deletedAppsKey, JSON.stringify(apps));
+}
+
+function updateRecycleBin() {
+  const deletedApps = getDeletedApplications();
+  document.getElementById('deletedCount').textContent = deletedApps.length;
+  
+  const list = document.getElementById('deletedApplicationsList');
+  if (!list) return;
+
+  list.innerHTML = deletedApps.map((app, idx) => `
+    <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+      <div class="flex justify-between items-start mb-2">
+        <div>
+          <h4 class="font-semibold text-gray-800">${app.name}</h4>
+          <p class="text-sm text-gray-500">${app.program}</p>
+        </div>
+        <button onclick="restoreApplication(${idx})" 
+                class="text-blue-600 hover:text-blue-800 text-sm font-semibold">
+          Restore
+        </button>
+      </div>
+      <p class="text-xs text-gray-400">Deleted: ${new Date(app.deletedAt).toLocaleString()}</p>
+    </div>
+  `).join('') || '<p class="text-gray-500 text-center p-4">No deleted applications</p>';
+}
+
+// Update the confirmDelete function
+function confirmDelete() {
+  if (deleteIndex === -1) return;
+  
+  try {
+    const admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+    const deletedApp = admissions[deleteIndex];
+    
+    // Add deletion timestamp
+    deletedApp.deletedAt = new Date().toISOString();
+    
+    // Add to deleted applications
+    const deletedApps = getDeletedApplications();
+    deletedApps.push(deletedApp);
+    saveDeletedApplications(deletedApps);
+    
+    // Remove from active applications
+    admissions.splice(deleteIndex, 1);
+    localStorage.setItem('admissions', JSON.stringify(admissions));
+    
+    showEmailNotification('Application moved to recycle bin', true);
+    updateRecycleBin();
+  } catch (error) {
+    showEmailNotification('Error deleting application', false);
+    console.error('Delete error:', error);
+  }
+
+  document.getElementById('deleteModal').classList.add('hidden');
+  deleteIndex = -1;
+  renderAdmissionsCards();
+}
+
+function restoreApplication(idx) {
+  try {
+    const deletedApps = getDeletedApplications();
+    const appToRestore = deletedApps[idx];
+    
+    // Remove deletion timestamp
+    delete appToRestore.deletedAt;
+    
+    // Add back to active applications
+    const admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+    admissions.push(appToRestore);
+    localStorage.setItem('admissions', JSON.stringify(admissions));
+    
+    // Remove from deleted applications
+    deletedApps.splice(idx, 1);
+    saveDeletedApplications(deletedApps);
+    
+    showEmailNotification('Application restored successfully', true);
+    updateRecycleBin();
+    renderAdmissionsCards();
+  } catch (error) {
+    showEmailNotification('Error restoring application', false);
+    console.error('Restore error:', error);
+  }
+}
+
+// Add toggle functionality
+document.getElementById('recycleBinToggle').addEventListener('click', function() {
+  const section = document.getElementById('recycleBinSection');
+  section.classList.toggle('hidden');
+  if (!section.classList.contains('hidden')) {
+    updateRecycleBin();
+  }
+});
+
+// Update the showDashboard function
+const originalShowDashboard = showDashboard;
+showDashboard = function() {
+  originalShowDashboard();
+  updateRecycleBin();
+  updateDashboardStats();
+};
+</script>
+</body>
+</html>
